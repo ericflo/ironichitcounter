@@ -7,7 +7,11 @@ import sys
 import traceback
 import urlparse
 
+from cStringIO import StringIO
+
 import redis
+
+from jsmin import JavascriptMinify
 
 from flask import Flask, request, render_template
 
@@ -48,8 +52,11 @@ def counter():
         'site_count': site_count,
         'page_count': page_count,
     }
-    rendered = render_template('counter.js', **context)
-    resp = app.make_response(rendered)
+    rendered = StringIO(
+        render_template('counter.js', **context).encode('utf-8'))
+    minified = StringIO()
+    JavascriptMinify().minify(rendered, minified)
+    resp = app.make_response(minified.getvalue())
     resp.headers['Content-Type'] = 'appliction/javascript'
     return resp
 
