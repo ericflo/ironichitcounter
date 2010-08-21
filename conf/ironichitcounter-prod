@@ -18,6 +18,16 @@ server {
         index     index.html;
         break;
     }
+    location /robots.txt {
+        autoindex on;
+        index     index.html;
+        break;
+    }
+    location /favicon.ico {
+        autoindex on;
+        index     index.html;
+        break;
+    }
     location /nginx_status {
         stub_status on;
         access_log off;
