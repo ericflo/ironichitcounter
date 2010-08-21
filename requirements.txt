@@ -1,0 +1,8 @@
+simplejson
+
+Eventlet
+redis
+
+Werkzeug
+Jinja2
+Flask
