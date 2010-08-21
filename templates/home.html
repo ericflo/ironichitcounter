@@ -7,7 +7,7 @@
     <p>Add this to your site:</p>
     <textarea>&lt;div id=&quot;ironichitcounter&quot;&gt;&lt;/div&gt;
 &lt;script type=&quot;text/javascript&quot; src=&quot;{{ url_for('counter', _external=True) }}&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;</textarea>
-    <div id="ironichitcounter"></div>
     <img src="{{ url_for('static', filename='images/construction.gif') }}" alt="THIS PAGE IS STILL UNDER CONSTRUCTION" />
+    <div id="ironichitcounter"></div>
     <script type="text/javascript" src="{{ url_for('counter', _external=True) }}" charset="utf-8"></script> 
 {% endblock %}
