@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+exec 2>&1
+
+source /home/ironichitcounter/virtualenvs/ironichitcounter/bin/activate
+cd /home/ironichitcounter/ironichitcounter/
+echo "Starting ironichitcounter prod"
+exec envuidgid ironichitcounter python hitcounter.py
