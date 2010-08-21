@@ -23,13 +23,16 @@
         elt.appendChild(clear);
     };
     
+    var siteCount = '{{ site_count }}';
+    var pageCount = '{{ page_count }}';
+    
     var site = document.createElement('div');
     var siteClass = 'ihc-site';
     if(showPage) {
         siteClass += ' hide';
     }
     site.setAttribute('class', siteClass);
-    
+
     var page = document.createElement('div');
     var pageClass = 'ihc-page';
     if(!showPage) {
@@ -37,31 +40,30 @@
     }
     page.setAttribute('class', pageClass);
     
-    var siteCount = '{{ site_count }}';
-    var pageCount = '{{ page_count }}';
+    var render = function() {
+        for(var i = 0; i < siteCount.length; ++i) {
+            var digitDiv = document.createElement('div');
+            digitDiv.setAttribute('class', 'digit');
+            var digitText = document.createTextNode(siteCount[i]);
+            digitDiv.appendChild(digitText);
+            site.appendChild(digitDiv);
+        }
+        addClear(site);
     
-    for(var i = 0; i < siteCount.length; ++i) {
-        var digitDiv = document.createElement('div');
-        digitDiv.setAttribute('class', 'digit');
-        var digitText = document.createTextNode(siteCount[i]);
-        digitDiv.appendChild(digitText);
-        site.appendChild(digitDiv);
-    }
-    addClear(site);
+        for(var i = 0; i < pageCount.length; ++i) {
+            var digitDiv = document.createElement('div');
+            digitDiv.setAttribute('class', 'digit');
+            var digitText = document.createTextNode(pageCount[i]);
+            digitDiv.appendChild(digitText);
+            page.appendChild(digitDiv);
+        }
+        addClear(page);
     
-    for(var i = 0; i < pageCount.length; ++i) {
-        var digitDiv = document.createElement('div');
-        digitDiv.setAttribute('class', 'digit');
-        var digitText = document.createTextNode(pageCount[i]);
-        digitDiv.appendChild(digitText);
-        page.appendChild(digitDiv);
-    }
-    addClear(page);
-    
-    ihc.appendChild(site);
-    ihc.appendChild(page);
-    addClear(ihc);
-    
+        ihc.appendChild(site);
+        ihc.appendChild(page);
+        addClear(ihc);
+    };
+
     var clickHandler = function(e) {
         document.location = '{{ url_for('home', _external=True) }}';
     };
@@ -86,4 +88,5 @@
     ihc.addEventListener('click', clickHandler, false);
     ihc.addEventListener('mouseover', mouseOverHandler, false);
     ihc.addEventListener('mouseout', mouseOutHandler, false);
+    render();
 })();
