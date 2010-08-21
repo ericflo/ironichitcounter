@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+ssh -t ironichitcounter@ironichitcounter.com '\
+cd /home/ironichitcounter/ironichitcounter/;\
+git pull;\
+sudo svc -t /etc/service/ironichitcounter-prod;\
+'
