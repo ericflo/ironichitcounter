@@ -15,3 +15,5 @@ ol li {list-style-position:inside;list-style:decimal;}
 * a {position:relative;} /* Gets links displaying over a PNG background */
 a {outline:none;} /* Gets rid of Firefox's dotted borders */
 a img {border:none;} /* Gets rid of IE's blue borders */
+
+#home textarea { display: block; width: 600px; }

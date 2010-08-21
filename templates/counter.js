@@ -1,10 +1,3 @@
-/*
-<div id="ironichitcounter">
-    <span class="ihc-title">IHC</span>
-    <span class="ihc-site">site <em>15</em></span>
-    <span class="ihc-page">page <em>3</em></span>
-</div>
-*/
 (function() {
     var css = document.getElementById('ironichitcounter-css');
     if(!css) {
@@ -17,35 +10,80 @@
     	document.getElementsByTagName('head')[0].appendChild(css);
 	}
     
-    var elt = document.getElementById('ironichitcounter');
-    if(!elt) {
+    var ihc = document.getElementById('ironichitcounter');
+    if(!ihc) {
         return;
     }
     
-    var titleSpan = document.createElement('span');
-    titleSpan.setAttribute('class', 'ihc-title');
-    var titleSpanText = document.createTextNode('IHC');
-    titleSpan.appendChild(titleSpanText);
+    var showPage = (ihc.getAttribute('class') || '').indexOf('site') === -1;
     
-    var siteSpan = document.createElement('span');
-    siteSpan.setAttribute('class', 'ihc-site');
-    var siteSpanText = document.createTextNode('site ');
-    siteSpan.appendChild(siteSpanText)
-    var siteSpanEm = document.createElement('em');
-    var siteSpanCountText = document.createTextNode('{{ site_count }}');
-    siteSpanEm.appendChild(siteSpanCountText);
-    siteSpan.appendChild(siteSpanEm);
+    var addClear = function(elt) {
+        var clear = document.createElement('div');
+        clear.setAttribute('class', 'clear');
+        elt.appendChild(clear);
+    };
     
-    var pageSpan = document.createElement('span');
-    pageSpan.setAttribute('class', 'ihc-page');
-    var pageSpanText = document.createTextNode('page ');
-    pageSpan.appendChild(pageSpanText)
-    var pageSpanEm = document.createElement('em');
-    var pageSpanCountText = document.createTextNode('{{ page_count }}');
-    pageSpanEm.appendChild(pageSpanCountText);
-    pageSpan.appendChild(pageSpanEm);
+    var site = document.createElement('div');
+    var siteClass = 'ihc-site';
+    if(showPage) {
+        siteClass += ' hide';
+    }
+    site.setAttribute('class', siteClass);
     
-    elt.appendChild(titleSpan);
-    elt.appendChild(siteSpan);
-    elt.appendChild(pageSpan);
+    var page = document.createElement('div');
+    var pageClass = 'ihc-page';
+    if(!showPage) {
+        pageClass += ' hide';
+    }
+    page.setAttribute('class', pageClass);
+    
+    var siteCount = '{{ site_count }}';
+    var pageCount = '{{ page_count }}';
+    
+    for(var i = 0; i < siteCount.length; ++i) {
+        var digitDiv = document.createElement('div');
+        digitDiv.setAttribute('class', 'digit');
+        var digitText = document.createTextNode(siteCount[i]);
+        digitDiv.appendChild(digitText);
+        site.appendChild(digitDiv);
+    }
+    addClear(site);
+    
+    for(var i = 0; i < pageCount.length; ++i) {
+        var digitDiv = document.createElement('div');
+        digitDiv.setAttribute('class', 'digit');
+        var digitText = document.createTextNode(pageCount[i]);
+        digitDiv.appendChild(digitText);
+        page.appendChild(digitDiv);
+    }
+    addClear(page);
+    
+    ihc.appendChild(site);
+    ihc.appendChild(page);
+    addClear(ihc);
+    
+    var clickHandler = function(e) {
+        document.location = '{{ url_for('home', _external=True) }}';
+    };
+    var mouseOverHandler = function(e) {
+        var tempSiteClass = '' + siteClass;
+        var tempPageClass = '' + pageClass;
+        if(showPage) {
+            tempPageClass += ' hide';
+            tempSiteClass = tempSiteClass.replace(' hide', '');
+        }
+        else {
+            tempSiteClass += ' hide';
+            tempPageClass = tempPageClass.replace(' hide', '');
+        }
+        site.setAttribute('class', tempSiteClass);
+        page.setAttribute('class', tempPageClass);
+    };
+    var mouseOutHandler = function(e) {
+        site.setAttribute('class', siteClass);
+        page.setAttribute('class', pageClass);
+    }
+    ihc.addEventListener('click', clickHandler, false);
+    ihc.addEventListener('mouseover', mouseOverHandler, false);
+    ihc.addEventListener('mouseout', mouseOutHandler, false);
 })();
