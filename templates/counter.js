@@ -1,0 +1,1 @@
+document.write('Site: {{ site_count }} Page: {{ page_count }}')
