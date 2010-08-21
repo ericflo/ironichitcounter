@@ -1,7 +1,8 @@
 /*
 <div id="ironichitcounter">
-    <span class="ihc-site">15</span>
-    <span class="ihc-page">3</span>
+    <span class="ihc-title">IHC</span>
+    <span class="ihc-site">site <em>15</em></span>
+    <span class="ihc-page">page <em>3</em></span>
 </div>
 */
 (function() {
@@ -21,16 +22,30 @@
         return;
     }
     
+    var titleSpan = document.createElement('span');
+    titleSpan.setAttribute('class', 'ihc-title');
+    var titleSpanText = document.createTextNode('IHC');
+    titleSpan.appendChild(titleSpanText);
+    
     var siteSpan = document.createElement('span');
     siteSpan.setAttribute('class', 'ihc-site');
-    var siteSpanText = document.createTextNode('{{ site_count }}');
-    siteSpan.appendChild(siteSpanText);
+    var siteSpanText = document.createTextNode('site ');
+    siteSpan.appendChild(siteSpanText)
+    var siteSpanEm = document.createElement('em');
+    var siteSpanCountText = document.createTextNode('{{ site_count }}');
+    siteSpanEm.appendChild(siteSpanCountText);
+    siteSpan.appendChild(siteSpanEm);
     
     var pageSpan = document.createElement('span');
     pageSpan.setAttribute('class', 'ihc-page');
-    var pageSpanText = document.createTextNode('{{ page_count }}');
-    pageSpan.appendChild(pageSpanText);
+    var pageSpanText = document.createTextNode('page ');
+    pageSpan.appendChild(pageSpanText)
+    var pageSpanEm = document.createElement('em');
+    var pageSpanCountText = document.createTextNode('{{ page_count }}');
+    pageSpanEm.appendChild(pageSpanCountText);
+    pageSpan.appendChild(pageSpanEm);
     
+    elt.appendChild(titleSpan);
     elt.appendChild(siteSpan);
     elt.appendChild(pageSpan);
 })();
