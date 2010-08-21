@@ -10,6 +10,7 @@ import urlparse
 from cStringIO import StringIO
 
 import redis
+import simplejson
 
 from jsmin import JavascriptMinify
 
@@ -32,9 +33,32 @@ class RedisPool(eventlet.pools.Pool):
 
 REDIS_POOL = RedisPool()
 
+def get_keys_from_referrer(referrer):
+    parsed = urlparse.urlparse(referrer)
+    site_key = (u'site|%s' % (parsed.netloc,)).encode('utf-8')
+    page_key = (u'page|%s|%s' % (parsed.netloc, parsed.path)).encode('utf-8')
+    return site_key, page_key
+
 @app.route('/')
 def home():
     return render_template('home.html')
+
+@app.route('/data')
+def data():
+    site_count = 0
+    page_count = 0
+    referrer = request.args.get('referrer', '')
+    if referrer:
+        site_key, page_key = get_keys_from_referrer(referrer)
+        with REDIS_POOL.item() as client:
+            site_count = client.get(site_key)
+            page_count = client.get(page_key)
+    resp = app.make_response(simplejson.dumps({
+        'site_count': site_count,
+        'page_count': page_count,
+    }))
+    resp.headers['Content-Type'] = 'application/json'
+    return resp
 
 @app.route('/counter.js')
 def counter():
@@ -42,9 +66,7 @@ def counter():
     site_count = 0
     page_count = 0
     if referrer:
-        parsed = urlparse.urlparse(referrer)
-        site_key = (u'site|%s' % (parsed.netloc,)).encode('utf-8')
-        page_key = (u'page|%s|%s' % (parsed.netloc, parsed.path)).encode('utf-8')
+        site_key, page_key = get_keys_from_referrer(referrer)
         with REDIS_POOL.item() as client:
             site_count = client.incr(site_key)
             page_count = client.incr(page_key)
