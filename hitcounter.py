@@ -16,6 +16,7 @@ from jsmin import JavascriptMinify
 
 from flask import Flask, request, render_template
 
+
 class ErrorPrintingApp(Flask):
     
     def handle_exception(self, e):
@@ -26,12 +27,14 @@ class ErrorPrintingApp(Flask):
 
 app = ErrorPrintingApp(__name__)
 
+
 class RedisPool(eventlet.pools.Pool):
 
     def create(self):
         return redis.Redis()
 
 REDIS_POOL = RedisPool()
+
 
 def get_keys_from_referrer(referrer):
     parsed = urlparse.urlparse(referrer)
