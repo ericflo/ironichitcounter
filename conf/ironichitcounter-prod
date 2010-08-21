@@ -6,6 +6,7 @@ server {
     listen 80;
     server_name ironichitcounter.com www.ironichitcounter.com;
     root /home/ironichitcounter/ironichitcounter;
+    access_log  /var/log/nginx/ironichitcounter-prod.access.log combined;
     
     keepalive_timeout 5;
     
