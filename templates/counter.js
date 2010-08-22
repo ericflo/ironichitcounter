@@ -15,6 +15,15 @@
         return;
     }
     
+    var listenForEvent = function(element, eventName, callback) {
+        if(element.addEventListener) {
+            element.addEventListener(eventName, callback, false);
+        }
+        else if(element.attachEvent) {
+            element.attachEvent(eventName, callback);
+        }
+    };
+    
     var showPage = (ihc.getAttribute('class') || '').indexOf('site') === -1;
     
     var addClear = function(elt) {
@@ -107,9 +116,9 @@
         site.setAttribute('class', siteClass);
         page.setAttribute('class', pageClass);
     }
-    ihc.addEventListener('click', clickHandler, false);
-    ihc.addEventListener('mouseover', mouseOverHandler, false);
-    ihc.addEventListener('mouseout', mouseOutHandler, false);
+    listenForEvent(ihc, 'click', clickHandler);
+    listenForEvent(ihc, 'mouseover', mouseOverHandler);
+    listenForEvent(ihc, 'mouseout', mouseOutHandler);
     render();
     setTimeout(poll, 6000);
 })();
