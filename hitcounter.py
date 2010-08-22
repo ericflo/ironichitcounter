@@ -56,10 +56,14 @@ def data():
         with REDIS_POOL.item() as client:
             site_count = client.get(site_key)
             page_count = client.get(page_key)
-    resp = app.make_response(simplejson.dumps({
+    encoded = simplejson.dumps({
         'site_count': site_count,
         'page_count': page_count,
-    }))
+    })
+    jsonp = request.args.get('jsonp')
+    if jsonp:
+        encoded = '%s(%s)' % (jsonp, encoded)
+    resp = app.make_response(encoded)
     resp.headers['Content-Type'] = 'application/json'
     return resp
 
