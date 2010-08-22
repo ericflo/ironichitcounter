@@ -60,11 +60,13 @@ def data():
         'site_count': site_count,
         'page_count': page_count,
     })
+    content_type = 'application/json'
     jsonp = request.args.get('jsonp')
     if jsonp:
         encoded = '%s(%s)' % (jsonp, encoded)
+        content_type = 'text/javascript'
     resp = app.make_response(encoded)
-    resp.headers['Content-Type'] = 'application/json'
+    resp.headers['Content-Type'] = content_type
     return resp
 
 @app.route('/counter.js')
