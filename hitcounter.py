@@ -80,6 +80,7 @@ def counter():
     context = {
         'site_count': site_count,
         'page_count': page_count,
+        'referrer': referrer,
     }
     rendered = StringIO(
         render_template('counter.js', **context).encode('utf-8'))
